@@ -4,9 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram WebApp</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Веб-интерфейс для Telegram</h1>
-    <p>Это ваш первый хостинг с GitHub Pages!</p>
+    <div class="container">
+        <h1>Ввод сделки</h1>
+        <form id="deal-form">
+            <label for="pair">Валютная пара:</label>
+            <input type="text" id="pair" name="pair" placeholder="Например, BTCUSDT" required>
+
+            <label for="tp">Take Profit (TP):</label>
+            <input type="number" id="tp" name="tp" placeholder="Введите TP" required>
+
+            <label for="sl">Stop Loss (SL):</label>
+            <input type="number" id="sl" name="sl" placeholder="Введите SL" required>
+
+            <label for="risk">Риск (%):</label>
+            <input type="number" id="risk" name="risk" placeholder="Введите риск в %" required>
+
+            <button type="button" onclick="submitForm()">Отправить</button>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            const pair = document.getElementById("pair").value;
+            const tp = document.getElementById("tp").value;
+            const sl = document.getElementById("sl").value;
+            const risk = document.getElementById("risk").value;
+
+            // Передача данных обратно в Telegram
+            Telegram.WebApp.sendData(JSON.stringify({ pair, tp, sl, risk }));
+
+            // Закрытие WebApp
+            Telegram.WebApp.close();
+        }
+    </script>
 </body>
 </html>
