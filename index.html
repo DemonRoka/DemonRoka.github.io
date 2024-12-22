@@ -26,17 +26,6 @@
             width: 90%;
             max-width: 400px;
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-            color: #aaaaaa;
-        }
         select {
             width: 100%;
             padding: 10px;
@@ -52,7 +41,6 @@
 <body>
     <div class="container">
         <h1>Выбор аккаунта</h1>
-        <label for="accounts">Аккаунт:</label>
         <select id="accounts">
             <option value="">Загрузка аккаунтов...</option>
         </select>
@@ -61,11 +49,13 @@
     <script>
         async function loadAccounts() {
             try {
-                const response = await fetch('http://<ваш_сервер>:5000/get_accounts');
+                const response = await fetch('http://127.0.0.1:5000/get_accounts');
                 if (response.ok) {
-                    const accounts = await response.json();
+                    const data = await response.json();
+                    const accounts = data.accounts;
+
                     const selectElement = document.getElementById('accounts');
-                    selectElement.innerHTML = ''; // Очищаем список
+                    selectElement.innerHTML = ''; // Очистить старые данные
 
                     accounts.forEach(account => {
                         const option = document.createElement('option');
@@ -74,14 +64,14 @@
                         selectElement.appendChild(option);
                     });
                 } else {
-                    console.error('Ошибка загрузки аккаунтов:', response.statusText);
+                    console.error('Ошибка загрузки данных:', response.statusText);
                 }
             } catch (error) {
                 console.error('Ошибка запроса:', error);
             }
         }
 
-        // Загружаем аккаунты при запуске
+        // Загрузка аккаунтов при запуске
         loadAccounts();
     </script>
 </body>
