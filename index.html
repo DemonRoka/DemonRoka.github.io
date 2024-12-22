@@ -10,7 +10,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #121212;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,79 +19,70 @@
             height: 100vh;
         }
         .container {
-            background: #ffffff;
+            background: #1e1e1e;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
             width: 90%;
             max-width: 400px;
         }
         h1 {
             font-size: 24px;
             margin-bottom: 20px;
-            color: #333333;
+            color: #ffffff;
         }
         label {
             font-weight: bold;
             display: block;
             margin-bottom: 5px;
+            color: #aaaaaa;
         }
-        input {
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
+            border: 1px solid #333333;
             border-radius: 4px;
             font-size: 14px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
+            background-color: #2b2b2b;
             color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ввод сделки</h1>
-        <form id="deal-form">
-            <label for="pair">Валютная пара:</label>
-            <input type="text" id="pair" name="pair" placeholder="Например, BTCUSDT" required>
-
-            <label for="tp">Take Profit (TP):</label>
-            <input type="number" id="tp" name="tp" placeholder="Введите TP" required>
-
-            <label for="sl">Stop Loss (SL):</label>
-            <input type="number" id="sl" name="sl" placeholder="Введите SL" required>
-
-            <label for="risk">Риск (%):</label>
-            <input type="number" id="risk" name="risk" placeholder="Введите риск в %" required>
-
-            <button type="button" onclick="submitForm()">Отправить</button>
-        </form>
+        <h1>Выбор аккаунта</h1>
+        <label for="accounts">Аккаунт:</label>
+        <select id="accounts">
+            <option value="">Загрузка аккаунтов...</option>
+        </select>
     </div>
 
     <script>
-        function submitForm() {
-            const pair = document.getElementById("pair").value;
-            const tp = document.getElementById("tp").value;
-            const sl = document.getElementById("sl").value;
-            const risk = document.getElementById("risk").value;
+        async function loadAccounts() {
+            try {
+                const response = await fetch('http://<ваш_сервер>:5000/get_accounts');
+                if (response.ok) {
+                    const accounts = await response.json();
+                    const selectElement = document.getElementById('accounts');
+                    selectElement.innerHTML = ''; // Очищаем список
 
-            // Передача данных обратно в Telegram
-            Telegram.WebApp.sendData(JSON.stringify({ pair, tp, sl, risk }));
-
-            // Закрытие WebApp
-            Telegram.WebApp.close();
+                    accounts.forEach(account => {
+                        const option = document.createElement('option');
+                        option.value = account.name;
+                        option.textContent = `${account.name} (Депозит: ${account.deposit})`;
+                        selectElement.appendChild(option);
+                    });
+                } else {
+                    console.error('Ошибка загрузки аккаунтов:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Ошибка запроса:', error);
+            }
         }
+
+        // Загружаем аккаунты при запуске
+        loadAccounts();
     </script>
 </body>
 </html>
