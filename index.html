@@ -3,57 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Key Screener</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f9;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
-</head>
-<body>
-    <iframe id="key-screener" src="https://app.key-screener.com/" title="Key Screener"></iframe>
+    <title>Auto Login</title>
     <script>
-        document.getElementById('key-screener').onload = function() {
-            const iframe = document.getElementById('key-screener').contentWindow.document;
-
-            // Подождем некоторое время для полной загрузки iframe
+        // Функция для автоматического заполнения и входа
+        function autoLogin() {
+            // Подождем, пока страница полностью загрузится
             setTimeout(() => {
                 try {
-                    // Найти элементы ввода и кнопку отправки
-                    const emailInput = iframe.querySelector("input[name='email']");
-                    const passwordInput = iframe.querySelector("input[name='password']");
-                    const submitButton = iframe.querySelector("button[type='submit']");
+                    // Находим все поля ввода
+                    const inputs = document.querySelectorAll('input');
 
-                    if (emailInput && passwordInput && submitButton) {
-                        // Заполняем данные
-                        emailInput.value = "mihailkaravan98@gmail.com";
-                        passwordInput.value = "Freedom20994506328";
+                    // Тестовые данные
+                    const testData = {
+                        username: 'mihailkaravan98@gmail.com', // Логин
+                        password: 'Freedom20994506328'        // Пароль
+                    };
 
-                        // Триггерим события ввода для корректной работы
-                        emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-                        passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    // Заполняем данные в соответствующие поля
+                    inputs.forEach(input => {
+                        const name = input.name.toLowerCase(); // Приводим к нижнему регистру для универсальности
+                        if (testData[name]) {
+                            input.value = testData[name];
+                            console.log(`Поле ${name} заполнено значением "${testData[name]}"`);
+                        }
+                    });
 
-                        // Нажимаем кнопку входа
-                        submitButton.click();
+                    // Ищем кнопку входа
+                    const loginButton = document.querySelector('button[type="submit"], input[type="submit"]');
+
+                    // Если кнопка найдена, кликаем по ней
+                    if (loginButton) {
+                        loginButton.click();
+                        console.log('Кнопка входа нажата.');
                     } else {
-                        console.error("Элементы для входа не найдены в iframe.");
+                        console.log('Кнопка входа не найдена.');
                     }
                 } catch (error) {
-                    console.error("Ошибка при доступе к iframe:", error);
+                    console.error('Ошибка при автоматическом входе:', error);
                 }
-            }, 3000); // Увеличиваем задержку, чтобы контент успел загрузиться
-        };
+            }, 2000); // Ждем 2 секунды для загрузки страницы
+        }
+
+        // Запускаем функцию автоматически при загрузке страницы
+        document.addEventListener("DOMContentLoaded", autoLogin);
     </script>
+</head>
+<body>
+    <h1>Переход на сайт...</h1>
 </body>
 </html>
