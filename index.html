@@ -24,25 +24,35 @@
 <body>
     <iframe id="key-screener" src="https://app.key-screener.com/" title="Key Screener"></iframe>
     <script>
-        // Функция для автоматического заполнения и входа
         document.getElementById('key-screener').onload = function() {
             const iframe = document.getElementById('key-screener').contentWindow.document;
 
-            // Подождем, пока элементы будут доступны
+            // Подождем некоторое время для полной загрузки iframe
             setTimeout(() => {
-                // Автоматически заполняем email и пароль
-                const emailInput = iframe.querySelector("input[name='email']");
-                const passwordInput = iframe.querySelector("input[name='password']");
-                const submitButton = iframe.querySelector("button[type='submit']");
+                try {
+                    // Найти элементы ввода и кнопку отправки
+                    const emailInput = iframe.querySelector("input[name='email']");
+                    const passwordInput = iframe.querySelector("input[name='password']");
+                    const submitButton = iframe.querySelector("button[type='submit']");
 
-                if (emailInput && passwordInput && submitButton) {
-                    emailInput.value = "mihailkaravan98@gmail.com";
-                    passwordInput.value = "Freedom20994506328";
-                    submitButton.click();
-                } else {
-                    console.error("Элементы для входа не найдены.");
+                    if (emailInput && passwordInput && submitButton) {
+                        // Заполняем данные
+                        emailInput.value = "mihailkaravan98@gmail.com";
+                        passwordInput.value = "Freedom20994506328";
+
+                        // Триггерим события ввода для корректной работы
+                        emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+                        passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+                        // Нажимаем кнопку входа
+                        submitButton.click();
+                    } else {
+                        console.error("Элементы для входа не найдены в iframe.");
+                    }
+                } catch (error) {
+                    console.error("Ошибка при доступе к iframe:", error);
                 }
-            }, 2000); // Ожидание 2 секунды для загрузки контента
+            }, 3000); // Увеличиваем задержку, чтобы контент успел загрузиться
         };
     </script>
 </body>
