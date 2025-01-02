@@ -22,6 +22,28 @@
     </style>
 </head>
 <body>
-    <iframe src="https://app.key-screener.com/" title="Key Screener"></iframe>
+    <iframe id="key-screener" src="https://app.key-screener.com/" title="Key Screener"></iframe>
+    <script>
+        // Функция для автоматического заполнения и входа
+        document.getElementById('key-screener').onload = function() {
+            const iframe = document.getElementById('key-screener').contentWindow.document;
+
+            // Подождем, пока элементы будут доступны
+            setTimeout(() => {
+                // Автоматически заполняем email и пароль
+                const emailInput = iframe.querySelector("input[name='email']");
+                const passwordInput = iframe.querySelector("input[name='password']");
+                const submitButton = iframe.querySelector("button[type='submit']");
+
+                if (emailInput && passwordInput && submitButton) {
+                    emailInput.value = "mihailkaravan98@gmail.com";
+                    passwordInput.value = "Freedom20994506328";
+                    submitButton.click();
+                } else {
+                    console.error("Элементы для входа не найдены.");
+                }
+            }, 2000); // Ожидание 2 секунды для загрузки контента
+        };
+    </script>
 </body>
 </html>
