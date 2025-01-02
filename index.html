@@ -5,65 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto Login</title>
     <script>
-        // Переменные для управления входом
-        const TARGET_URL = "https://app.key-screener.com"; // URL для входа
-        const LOGIN_DELAY = 3000; // Задержка перед выполнением автоматизации (в миллисекундах)
+        // URL целевого сайта
+        const TARGET_URL = "https://app.key-screener.com";
 
         // Тестовые данные для входа
         const testData = {
-            username: 'mihailkaravan98@gmail.com', // Логин
-            password: 'Freedom20994506328'        // Пароль
+            username: 'mihailkaravan98@gmail.com',
+            password: 'Freedom20994506328'
         };
 
-        // Функция для автоматического заполнения и входа
+        // Функция автоматического заполнения и входа
         function autoLogin() {
-            try {
-                console.log("Попытка автоматического входа...");
+            setTimeout(() => {
+                try {
+                    console.log("Попытка автоматического входа...");
 
-                // Находим все поля ввода
-                const inputs = document.querySelectorAll('input');
+                    // Находим все поля ввода
+                    const inputs = document.querySelectorAll('input');
 
-                // Заполняем данные в соответствующие поля
-                inputs.forEach(input => {
-                    const name = input.name.toLowerCase(); // Приводим к нижнему регистру для универсальности
-                    if (testData[name]) {
-                        input.value = testData[name];
-                        const inputEvent = new Event('input', { bubbles: true });
-                        input.dispatchEvent(inputEvent);
-                        console.log(`Поле ${name} заполнено значением "${testData[name]}"`);
+                    // Заполняем данные в соответствующие поля
+                    inputs.forEach(input => {
+                        const name = input.name.toLowerCase(); // Приводим к нижнему регистру для универсальности
+                        if (testData[name]) {
+                            input.value = testData[name];
+                            const inputEvent = new Event('input', { bubbles: true });
+                            input.dispatchEvent(inputEvent);
+                            console.log(`Поле ${name} заполнено значением "${testData[name]}"`);
+                        }
+                    });
+
+                    // Ищем кнопку входа
+                    const loginButton = document.querySelector('button[type="submit"], input[type="submit"]');
+                    if (loginButton) {
+                        loginButton.click();
+                        console.log('Кнопка входа нажата.');
+                    } else {
+                        console.error('Кнопка входа не найдена.');
                     }
-                });
-
-                // Ищем кнопку входа
-                const loginButton = document.querySelector('button[type="submit"], input[type="submit"]');
-                if (loginButton) {
-                    loginButton.click();
-                    console.log('Кнопка входа нажата.');
-                } else {
-                    console.error('Кнопка входа не найдена.');
+                } catch (error) {
+                    console.error('Ошибка при автоматическом входе:', error);
                 }
-            } catch (error) {
-                console.error('Ошибка при автоматическом входе:', error);
-            }
+            }, 3000); // Ждем 3 секунды для загрузки страницы
         }
 
-        // Функция перенаправления на сайт и запуска входа
-        function redirectToTargetAndLogin() {
+        // Переход на целевой сайт и выполнение скрипта
+        function redirectToTarget() {
             if (window.location.href !== TARGET_URL) {
-                // Перенаправляем на целевой сайт
-                console.log(`Перенаправляем на ${TARGET_URL}...`);
+                // Если находимся не на целевом сайте, перенаправляем
                 window.location.href = TARGET_URL;
             } else {
-                // Если уже на целевом сайте, запускаем автоматизацию
-                setTimeout(autoLogin, LOGIN_DELAY);
+                // Если уже на целевом сайте, выполняем автоматизацию
+                autoLogin();
             }
         }
 
-        // Запускаем функцию при загрузке страницы
-        document.addEventListener("DOMContentLoaded", redirectToTargetAndLogin);
+        // Запуск логики
+        document.addEventListener("DOMContentLoaded", redirectToTarget);
     </script>
 </head>
 <body>
-    <h1>Идет автоматический вход на сайт...</h1>
+    <h1>Переход на сайт...</h1>
 </body>
 </html>
